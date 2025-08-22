@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitespeed API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007cba;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005a85;
+        }
+        .result {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffe8e8;
+            border: 1px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Bitespeed Identity Reconciliation API Tester</h1>
+    
+    <div class="container">
+        <h2>Test /identify Endpoint</h2>
+        <div>
+            <input type="email" id="email" placeholder="Email (optional)" />
+            <input type="tel" id="phone" placeholder="Phone Number (optional)" />
+            <button onclick="testIdentify()">Send Request</button>
+        </div>
+        <button onclick="runAllTests()">Run All Test Scenarios</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        async function makeRequest(endpoint, data = null) {
+            try {
+                const options = {
+                    method: data ? 'POST' : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(API_BASE + endpoint, options);
+                const result = await response.json();
+                
+                return {
+                    status: response.status,
+                    data: result
+                };
+            } catch (error) {
+                return {
+                    status: 'ERROR',
+                    data: { error: error.message }
+                };
+            }
+        }
+
+        async function testIdentify() {
+            const email = document.getElementById('email').value || null;
+            const phone = document.getElementById('phone').value || null;
+
+            if (!email && !phone) {
+                alert('Please provide at least an email or phone number');
+                return;
+            }
+
+            const requestData = {};
+            if (email) requestData.email = email;
+            if (phone) requestData.phoneNumber = phone;
+
+            displayResult(`Testing with: ${JSON.stringify(requestData, null, 2)}`);
+
+            const result = await makeRequest('/identify', requestData);
+            displayResult(`Response: ${JSON.stringify(result, null, 2)}`, result.status !== 200);
+        }
+
+        async function runAllTests() {
+            const testCases = [
+                {
+                    name: 'Test 1: New primary contact',
+                    data: { email: 'lorraine@hillvalley.edu', phoneNumber: '123456' }
+                },
+                {
+                    name: 'Test 2: Create secondary contact (same phone)',
+                    data: { email: 'mcfly@hillvalley.edu', phoneNumber: '123456' }
+                },
+                {
+                    name: 'Test 3: Query existing contact by email',
+                    data: { email: 'lorraine@hillvalley.edu' }
+                },
+                {
+                    name: 'Test 4: Query existing contact by phone',
+                    data: { phoneNumber: '123456' }
+                },
+                {
+                    name: 'Test 5: Primary consolidation setup - First contact',
+                    data: { email: 'george@hillvalley.edu', phoneNumber: '919191' }
+                },
+                {
+                    name: 'Test 6: Primary consolidation setup - Second contact',
+                    data: { email: 'biffsucks@hillvalley.edu', phoneNumber: '717171' }
+                },
+                {
+                    name: 'Test 7: Primary consolidation - Link them',
+                    data: { email: 'george@hillvalley.edu', phoneNumber: '717171' }
+                }
+            ];
+
+            document.getElementById('results').innerHTML = '<h3>Running All Tests...</h3>';
+
+            for (const testCase of testCases) {
+                displayResult(`\n${testCase.name}:`);
+                displayResult(`Request: ${JSON.stringify(testCase.data, null, 2)}`);
+                
+                const result = await makeRequest('/identify', testCase.data);
+                displayResult(`Response: ${JSON.stringify(result, null, 2)}`, result.status !== 200);
+                
+                // Validate response structure
+                if (result.status === 200 && result.data.contact) {
+                    const contact = result.data.contact;
+                    const isValid = typeof contact.primaryContactId === 'number' &&
+                                  Array.isArray(contact.emails) &&
+                                  Array.isArray(contact.phoneNumbers) &&
+                                  Array.isArray(contact.secondaryContactIds);
+                    
+                    displayResult(`✅ Response format: ${isValid ? 'VALID' : 'INVALID'}`, !isValid);
+                } else {
+                    displayResult('❌ Invalid response structure', true);
+                }
+                
+                displayResult('---');
+                
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            displayResult('\n🎉 All tests completed!');
+        }
+
+        function displayResult(text, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${isError ? 'error' : ''}`;
+            resultDiv.textContent = text;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Test health endpoint on page load
+        window.onload = async function() {
+            displayResult('🔍 Testing server health...');
+            const health = await makeRequest('/');
+            displayResult(`Health check: ${JSON.stringify(health, null, 2)}`, health.status !== 200);
+        };
+    </script>
+</body>
+</html>
