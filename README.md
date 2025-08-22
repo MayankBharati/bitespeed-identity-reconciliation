@@ -2,21 +2,21 @@
 
 A Node.js/TypeScript web service that identifies and consolidates customer contact information across multiple purchases using email addresses and phone numbers.
 
-## 🚀 Live API Endpoint
+## Live API Endpoint
 - **Production**: `https://bitespeed-identity-reconciliation.onrender.com/identify` (Will be updated after deployment)
 - **Method**: POST
 - **Content-Type**: application/json
 
-## ✅ **Testing Status**
+## **Testing Status**
 All test scenarios have been validated:
-- ✅ New primary contact creation
-- ✅ Secondary contact linking via email/phone
-- ✅ Contact querying by email/phone
-- ✅ Primary contact consolidation (older primary wins)
-- ✅ Response format compliance
-- ✅ All business logic requirements met
+- New primary contact creation
+- Secondary contact linking via email/phone
+- Contact querying by email/phone
+- Primary contact consolidation (older primary wins)
+- Response format compliance
+- All business logic requirements met
 
-## 📋 Features
+## Features
 
 - **Contact Reconciliation**: Links customer contacts using email or phone number
 - **Primary-Secondary Hierarchy**: Maintains oldest contact as primary, newer ones as secondary
@@ -24,7 +24,7 @@ All test scenarios have been validated:
 - **PostgreSQL Database**: Uses Sequelize ORM with TypeScript decorators
 - **RESTful API**: Single `/identify` endpoint for all operations
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Backend**: Node.js with TypeScript
 - **Framework**: Express.js
@@ -32,7 +32,7 @@ All test scenarios have been validated:
 - **ORM**: Sequelize-TypeScript with decorators
 - **Environment**: dotenv for configuration
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Node.js (v14 or higher)
@@ -77,7 +77,7 @@ All test scenarios have been validated:
 
 6. **API will be available at**: `http://localhost:3000`
 
-## 🔗 API Usage
+## API Usage
 
 ### Endpoint: POST /identify
 
@@ -101,7 +101,7 @@ All test scenarios have been validated:
 }
 ```
 
-## 📊 Database Schema
+## Database Schema
 
 ### Contact Table
 ```typescript
@@ -117,7 +117,7 @@ All test scenarios have been validated:
 }
 ```
 
-## 🎯 Business Logic Examples
+## Business Logic Examples
 
 ### Case 1: New Customer
 **Request:**
@@ -154,7 +154,7 @@ All test scenarios have been validated:
 ### Case 3: Primary Consolidation
 When two primary contacts get linked through a new request, the older primary remains primary and the newer one becomes secondary.
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing with curl
 ```bash
@@ -173,14 +173,14 @@ curl http://localhost:3000/
 ```
 
 ### Test Cases Covered
-- ✅ New contact creation
-- ✅ Contact linking via email
-- ✅ Contact linking via phone number
-- ✅ Primary contact consolidation
-- ✅ Secondary contact creation
-- ✅ Duplicate request handling
+- New contact creation
+- Contact linking via email
+- Contact linking via phone number
+- Primary contact consolidation
+- Secondary contact creation
+- Duplicate request handling
 
-## 🚀 Deployment
+## Deployment
 
 ### Using Render.com (Recommended)
 
@@ -210,7 +210,7 @@ DATABASE_URL=postgresql://user:password@hostname:port/database
 NODE_ENV=production
 ```
 
-## 📁 Project Structure
+## Project Structure
 ```
 bitespeed-identity-reconciliation/
 ├── src/
@@ -232,7 +232,7 @@ bitespeed-identity-reconciliation/
 └── README.md                   # Project documentation
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -240,14 +240,14 @@ bitespeed-identity-reconciliation/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 Scripts
+## Scripts
 
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build TypeScript to JavaScript
 - `npm start` - Start production server
 - `npm test` - Run tests (to be implemented)
 
-## 🔧 Development Notes
+## Development Notes
 
 - Uses TypeScript strict mode for type safety
 - Sequelize with TypeScript decorators for clean model definitions
@@ -255,11 +255,11 @@ bitespeed-identity-reconciliation/
 - Proper database connection management
 - CORS enabled for cross-origin requests
 
-## 📄 License
+## License
 
 This project is licensed under the ISC License.
 
-## 🐛 Issue Reporting
+## Issue Reporting
 
 If you find any bugs or have feature requests, please create an issue on GitHub with:
 - Clear description of the problem
@@ -268,5 +268,3 @@ If you find any bugs or have feature requests, please create an issue on GitHub 
 - Environment details
 
 ---
-
-**Built with ❤️ for Bitespeed by [Your Name]**
